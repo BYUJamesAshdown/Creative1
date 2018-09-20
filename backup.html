@@ -1,0 +1,295 @@
+<!doctype html>
+<html>
+	<head>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<style>
+			.board {
+				float: left;
+				width: 80%;
+				background-color: blue;
+				opacity: .7;
+			}
+			
+			.row {
+				display: table;
+				width: 100%;
+			}
+			
+			.column {
+				display: table-cell;
+				height: 45px;
+				text-align: center;
+			}
+			
+			.circle {
+				border: 2px solid black;
+				border-radius: 50%;
+				background-color : white;
+			}
+			.downArrow {
+				font-size : 8vw;
+			}
+			.downArrow:hover {opacity:0.8}
+		</style>
+
+		<script>
+			var ROWS = 6;
+			var COLUMNS = 7;
+			
+			var player = 1;
+			var board = new Array(ROWS);
+			
+			for (var i = 0; i < ROWS; i++) {
+				board[i] = new Array(COLUMNS);
+				
+				for (var j = 0; j < COLUMNS; j++) {
+					board[i][j] = 0;
+				}
+			}
+			
+			var columnFill = new Array(COLUMNS);
+			
+			for (var i = 0; i < columnFill.length; i++) {
+				columnFill[i] = 0;
+			}
+			
+			function dropPiece(columnNum) {
+				var x = columnNum;
+				var y = columnFill[columnNum];
+				
+				if (y < ROWS) {
+					board[y][x] = player;
+					columnFill[columnNum]++;
+					
+					checkWin(x, y);
+					
+					var circleLocation = y + "-" + x;
+					
+					if (player == 1) {
+						document.getElementById(circleLocation).style.backgroundColor = "yellow";
+						player = 2;
+					} else {
+						document.getElementById(circleLocation).style.backgroundColor = "red";
+						player = 1;
+					}
+				}
+			}
+			
+			function checkWin(x, y) {
+				// horizontal check
+				var horizontalMatch = 0;
+				
+				for (var i = 0; i < 4; i++) {
+					var left = x - i;
+					
+					if (left < 0) {
+						break;
+					}
+					
+					if (board[y][left] == player) {
+						horizontalMatch++;
+					} else {
+						break;
+					}
+				}
+				
+				for (i = 1; i < 4; i++) {
+					var right = x + i;
+					
+					if (right >= COLUMNS) {
+						break;
+					}
+					
+					if (board[y][right] == player) {
+						horizontalMatch++;
+					} else {
+						break;
+					}
+				}
+				
+				if (horizontalMatch >= 4) {
+					document.getElementById("win").innerHTML = "Yes!";
+				}
+				
+				// vertical check
+				
+				var verticalMatch = 0;
+				
+				for (i = 0; i < 4; i++) {
+					var down = y - i;
+					
+					if (down < 0) {
+						break;
+					}
+					
+					if (board[down][x] == player) {
+						verticalMatch++;
+					} else {
+						break;
+					}
+				}
+				
+				for (i = 1; i < 4; i++) {
+					var up = y + i;
+					
+					if (up >= ROWS) {
+						break;
+					}
+					
+					if (board[up][x] == player) {
+						verticalMatch++;
+					} else {
+						break;
+					}
+				}
+				
+				if (verticalMatch >= 4) {
+					document.getElementById("win").innerHTML = "Yes!";
+				}
+				
+				var forwardDiagonalMatch = 0;
+				
+				for (i = 0; i < 4; i++) {
+					var left = x - i;
+					var down = y - i;
+					
+					if (left < 0 || down < 0) {
+						break;
+					}
+					
+					if (board[down][left] == player) {
+						forwardDiagonalMatch++;
+					} else {
+						break;
+					}
+				}
+				
+				for (i = 1; i < 4; i++) {
+					var right = x + i;
+					var up = y + i;
+					
+					if (right >= COLUMNS || up >= ROWS) {
+						break;
+					}
+					
+					if (board[up][right] == player) {
+						forwardDiagonalMatch++;
+					} else {
+						break;
+					}
+				}
+				
+				if (forwardDiagonalMatch >= 4) {
+					document.getElementById("win").innerHTML = "Yes!";
+				}
+				
+				var backwardDiagonalMatch = 0;
+				
+				for (i = 0; i < 4; i++) {
+					var left = x - i;
+					var up = y + i;
+					
+					if (left < 0 || up >= ROWS) {
+						break;
+					}
+					
+					if (board[up][left] == player) {
+						backwardDiagonalMatch++;
+					} else {
+						break;
+					}
+				}
+				
+				for (i = 1; i < 4; i++) {
+					var right = x + i;
+					var down = y - i;
+					
+					if (right >= COLUMNS || down < 0) {
+						break;
+					}
+					
+					if (board[down][right] == player) {
+						backwardDiagonalMatch++;
+					} else {
+						break;
+					}
+				}
+				
+				if (backwardDiagonalMatch >= 4) {
+					document.getElementById("win").innerHTML = "Yes!";
+				}
+			}
+		</script>
+	</head>
+	
+	<body>
+		<!-- A Typical Connect-4 Grid is 7x6 -->
+		
+		<div class="board">
+			<div class="row">
+				 <i class="fa fa-arrow-down downArrow column" onClick="dropPiece(0)"></i>
+				 <i class="fa fa-arrow-down downArrow column" onClick="dropPiece(1)"></i>
+				 <i class="fa fa-arrow-down downArrow column" onClick="dropPiece(2)"></i>
+				 <i class="fa fa-arrow-down downArrow column" onClick="dropPiece(3)"></i>
+				 <i class="fa fa-arrow-down downArrow column" onClick="dropPiece(4)"></i>
+				 <i class="fa fa-arrow-down downArrow column" onClick="dropPiece(5)"></i>
+				 <i class="fa fa-arrow-down downArrow column" onClick="dropPiece(6)"></i>
+			</div>
+			<div class="row">
+				<div id="5-0" class="column circle"></div>
+				<div id="5-1" class="column circle"></div>
+				<div id="5-2" class="column circle"></div>
+				<div id="5-3" class="column circle"></div>
+				<div id="5-4" class="column circle"></div>
+				<div id="5-5" class="column circle"></div>
+				<div id="5-6" class="column circle"></div>
+			</div>
+			<div class="row">
+				<div id="4-0" class="column circle"></div>
+				<div id="4-1" class="column circle"></div>
+				<div id="4-2" class="column circle"></div>
+				<div id="4-3" class="column circle"></div>
+				<div id="4-4" class="column circle"></div>
+				<div id="4-5" class="column circle"></div>
+				<div id="4-6" class="column circle"></div>
+			</div>
+			<div class="row">
+				<div id="3-0" class="column circle"></div>
+				<div id="3-1" class="column circle"></div>
+				<div id="3-2" class="column circle"></div>
+				<div id="3-3" class="column circle"></div>
+				<div id="3-4" class="column circle"></div>
+				<div id="3-5" class="column circle"></div>
+				<div id="3-6" class="column circle"></div>
+			</div>
+			<div class="row">
+				<div id="2-0" class="column circle"></div>
+				<div id="2-1" class="column circle"></div>
+				<div id="2-2" class="column circle"></div>
+				<div id="2-3" class="column circle"></div>
+				<div id="2-4" class="column circle"></div>
+				<div id="2-5" class="column circle"></div>
+				<div id="2-6" class="column circle"></div>
+			</div>
+			<div class="row">
+				<div id="1-0" class="column circle"></div>
+				<div id="1-1" class="column circle"></div>
+				<div id="1-2" class="column circle"></div>
+				<div id="1-3" class="column circle"></div>
+				<div id="1-4" class="column circle"></div>
+				<div id="1-5" class="column circle"></div>
+				<div id="1-6" class="column circle"></div>
+			</div>
+			<div class="row">
+				<div id="0-0" class="column circle"></div>
+				<div id="0-1" class="column circle"></div>
+				<div id="0-2" class="column circle"></div>
+				<div id="0-3" class="column circle"></div>
+				<div id="0-4" class="column circle"></div>
+				<div id="0-5" class="column circle"></div>
+				<div id="0-6" class="column circle"></div>
+			</div>
+		</div>
+		<div id="win">Did you win?</div>
+	</body>
+</html>

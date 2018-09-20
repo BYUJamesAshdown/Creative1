@@ -1,0 +1,38 @@
+.board {
+	float : left;
+	background-color: blue;
+	opacity: .7;
+}
+
+.row {
+	display: table;
+	width: 100%;
+}
+
+.column {
+	display: table-cell;
+	text-align: center;
+	top: 0;
+	bottom: 0;
+}
+
+.circle {
+	border: 2px solid black;
+	border-radius: 50%;
+	background-color: white;
+	padding-bottom: 10%;
+}
+.downArrow {
+	font-size : 8vw;
+}
+.downArrow:hover {opacity:0.8}
+#newButton { 
+	border-radius: 30%;
+	padding: 15px;
+	font-family: Comic Sans MS;
+	background-color: #5b97f7;
+	text-align: center;
+	position: relative;
+	left: 20px;
+}
+#newButton:hover {background-color : #3a7eea;}
